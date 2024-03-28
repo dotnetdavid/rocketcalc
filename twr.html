@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Model Rocket Thrust-to-Weight Ratio Calculator</title>
+    <style>
+      body {
+        font-family: arial;
+      }
+    </style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+			const motors = 
+			[
+				{ name: "1/4A3-3T", thrust: 1.6 },
+				{ name: "1/2A3-2T", thrust: 2.5 },
+				{ name: "1/2A3-4T", thrust: 2.5 },
+				{ name: "A10-0T", thrust: 2.0 },
+				{ name: "A10-3T", thrust: 2.0 },
+				{ name: "A3-2T", thrust: 4.0 },
+				{ name: "A3-4T", thrust: 4.0 },
+				{ name: "A8-0", thrust: 6.0 },
+				{ name: "A8-3", thrust: 6.0 },
+				{ name: "A8-5", thrust: 6.0 },
+				{ name: "B4-2", thrust: 10.0 },
+				{ name: "B4-4", thrust: 10.0 },
+				{ name: "B6-0", thrust: 13.3 },
+				{ name: "B6-2", thrust: 13.3 },
+				{ name: "B6-4", thrust: 13.3 },
+				{ name: "B6-6", thrust: 13.3 },
+				{ name: "C5-3", thrust: 17.8 },
+				{ name: "C6-3", thrust: 19.6 },
+				{ name: "C6-5", thrust: 19.6 },
+				{ name: "C6-7", thrust: 19.6 },
+				{ name: "D10-5", thrust: 24.0 },
+				{ name: "D12-5", thrust: 29.7 },
+				{ name: "D21-4", thrust: 40.0 },
+				{ name: "D21-7", thrust: 40.0 },
+				{ name: "E6-4", thrust: 30.0 },
+				{ name: "E12-0", thrust: 35.0 },
+				{ name: "E12-4", thrust: 35.0 },
+				{ name: "E15-4", thrust: 30.0 },
+				{ name: "E20-4", thrust: 40.0 },
+				{ name: "E30-4", thrust: 40.0 },
+				{ name: "E30-7", thrust: 48.3 },
+				{ name: "E30-8", thrust: 40.0 },
+				{ name: "E40-4", thrust: 40.0 },
+				{ name: "E60-4", thrust: 50.0 },
+				{ name: "E75-4", thrust: 60.0 },
+				{ name: "E90-4", thrust: 70.0 },
+				{ name: "F15-4", thrust: 30.0 },
+				{ name: "F24-4", thrust: 50.0 },
+				{ name: "F39-6", thrust: 70.0 },
+				{ name: "F35-8", thrust: 55.2 },
+				{ name: "F15-4", thrust: 30.0 },
+				{ name: "F15-6", thrust: 30.0 },
+				{ name: "F24-4", thrust: 45.0 },
+				{ name: "F24-7", thrust: 45.0 },
+				{ name: "F39-6", thrust: 60.0 },
+				{ name: "F40-4", thrust: 45.0 },
+				{ name: "F52-5", thrust: 80.0 },
+				{ name: "F52-8", thrust: 80.0 },
+				{ name: "F60-4", thrust: 60.0 },
+				{ name: "F63-6", thrust: 65.0 },
+				{ name: "F67-6", thrust: 70.0 },
+				{ name: "F85-6", thrust: 80.0 },
+				{ name: "G40-4", thrust: 80.0 },
+				{ name: "G40-7", thrust: 80.0 },
+				{ name: "G80-4", thrust: 100.0 },
+				{ name: "G80-7", thrust: 100.0 },
+				{ name: "G80-10", thrust: 100.0 },
+				{ name: "G138-7", thrust: 160.0 },
+				{ name: "G138-10", thrust: 160.0 },
+				{ name: "G142-6", thrust: 160.0 },
+				{ name: "G142-8", thrust: 160.0 },
+				{ name: "G250-6", thrust: 250.0 },
+				{ name: "G250-9", thrust: 250.0 },
+				{ name: "G330-7", thrust: 300.0 },
+				{ name: "G339-8", thrust: 320.0 },
+				{ name: "G339-9", thrust: 320.0 },
+				{ name: "G339-10", thrust: 320.0 },
+				{ name: "G400-7", thrust: 350.0 },
+				{ name: "G40W-7", thrust: 80.0 },
+				{ name: "G74W-9", thrust: 95.0},
+				{ name: "G80T-7", thrust: 100.0 },
+				{ name: "G80T-10", thrust: 100.0 },
+				{ name: "G80W-7", thrust: 100.0 },
+				{ name: "G80W-10", thrust: 100.0 },
+				{ name: "H100W-10", thrust: 131.0 },
+				{ name: "H123W-6", thrust: 150.0 },
+				{ name: "H123W-8", thrust: 150.0 },
+				{ name: "H128W-6", thrust: 160.0 },
+				{ name: "H135W-14", thrust: 152.0 },
+				{ name: "H180W-10", thrust: 180.0 },
+				{ name: "H210W-12", thrust: 275.7 },
+				{ name: "H220W-12", thrust: 314.1 },
+				{ name: "H250W-12", thrust: 320.7 },
+				{ name: "H242T-10", thrust: 240.0 },
+				{ name: "H242T-12", thrust: 240.0 }
+		];
+		
+
+		function populatemotorDropdown(filter) {
+			const select = $("#motor-dropdown");
+			select.empty();
+			motors.filter(motor => motor.name.toLowerCase().includes(filter)).forEach(motor => {
+				select.append(`<option value="${motor.thrust}">${motor.name}</option>`);
+			});
+		}
+		  function convert_grams_to_oz(weight_oz) {
+			var g = weight_oz;
+			var oz = g / 28.34952;
+			return oz.toFixed(2);
+		}
+
+		$(document).ready(() => {
+			populatemotorDropdown("");
+
+			$("#search").on("keyup", () => {
+				const filter = $("#search").val().toLowerCase();
+				populatemotorDropdown(filter);
+			});
+
+			$("#calculate-button").on("click", () => {
+				const gravity = 9.81
+				const gm_to_kilo = 1000
+				const mass = $("#mass-input").val();
+				const thrust = $("#motor-dropdown").val();
+				weight = (mass / gm_to_kilo) * gravity
+				const ratio = thrust / weight;
+				$("#ratio-output").text(`Thrust-to-Weight Ratio: ${ratio.toFixed(2)}:1`);
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Model Rocket Thrust-to-Weight Ratio Calculator</h1>
+	<p>Select an motor:</p>
+	<input type="text" id="search" placeholder="Search motors">
+	<select id="motor-dropdown"></select>
+	<p>Enter the mass of your rocket in grams:</p>
+	<input type="number" id="mass-input" min="0" step="0.1">
+	<button id="calculate-button">Calculate</button>
+	<p id="ratio-output"></p>
+</body>
+  <footer>
+  <ul>
+    <li><a href="file:///D:/Rockets/calculators/metric_calc.html">Metric Conversions</a></li>
+    <li><a href="file:///D:/Rockets/calculators/twr.html">Thrust/Weight Ratio</a></li>
+    <li><a href="file:///D:/Rockets/calculators/tubes.html">Body Tubes</a></li>
+    <li><a href="file:///D:/Rockets/calculators/stats.html">Stats</a></li>
+  </ul>
+</footer>
+</html>

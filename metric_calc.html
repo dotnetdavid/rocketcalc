@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: arial;
+      }
+    </style>
+    <meta charset="utf-8">
+    <title>Metric/Imperial Conversion Calculator</title>
+  </head>
+  <body font face="arial">
+    <h1>Metric/Imperial Conversion Calculator</h1>
+    <table style="width:100%;"  border="0">
+      <tr style="text-align: left; vertical-align: top;">
+      <td >
+      <p>Enter a value in millimeters:</p>
+      <input type="text" id="mmInput">
+      <button onclick="convert()">Convert</button>
+      <p>Result in inches: <span id="inchResult"></span></p>
+      <p>Enter a value in inches:</p>
+      <input type="text" id="inchInput">
+      <button onclick="convert_in_mm()">Convert</button>
+      <p>Result in millimeters: <span id="mmResult"></span></p>
+      <br/>
+      <p>Enter a value in meters:</p>
+      <input type="text" id="mInput">
+      <button onclick="convert_m2f()">Convert</button>
+      <p>Result in feet: <span id="ftResult"></span></p>
+      <br/>
+      <p>Enter a value in feet:</p>
+      <input type="text" id="ftInput">
+      <button onclick="convert_f2m()">Convert</button>
+      <p>Result in meters: <span id="mResult"></span></p>
+      <br/>
+      <p>Enter a value in grams:</p>
+      <input type="text" id="gInput">
+      <button onclick="convert_grams_to_oz()">Convert</button>
+      <p>Result in ounces: <span id="ozResult"></span></p>
+      <br/>
+      <p>Enter a value in ounces:</p>
+      <input type="text" id="ozInput">
+      <button onclick="convert_oz_to_grams()">Convert</button>
+      <p>Result in ounces: <span id="gmResult"></span></p>
+      </td>
+      <td>
+        <p>Enter the length of your object and the scaling percentage below:</p>
+        <label for="length">Length:</label>
+        <input type="number" id="length" name="length"><br><br>
+        <label for="scaling">Scaling Percentage:</label>
+        <input type="number" id="scaling" name="scaling"><br><br>
+        <button onclick="scaleObject()">Scale Object</button><br><br>
+        <p id="result"></p>
+        <br/>
+        <p>Enter the original length and scaled length below:</p>
+        <label for="original-length">Original Length:</label>
+        <input type="number" id="original-length" name="original-length"><br><br>
+        <label for="scaled-length">Scaled Length:</label>
+        <input type="number" id="scaled-length" name="scaled-length"><br><br>
+        <button onclick="calculateScalingPercentage()">Calculate Scaling Percentage</button><br><br>
+        <p id="result_perc"></p>
+        </br>
+        <p> Enter the distance between two points on the map in meters (FOV fixed at 120degress and focal length at 350mm: </p>
+        <label for="actual_distance">Distance (meters):</label>
+        <input type="number" id="actual_distance" name="actual_distance"><br><br>
+        <label for="apparent_distance">Apparent_Distance (mm):</label>
+        <input type="number" id="apparent_distance" name="apparent_distance"><br><br>
+        <label for="fov">FOV (degrees):</label>
+        <input type="number" id="fov" name="fov" value=120><br><br>
+        <label for="focalLength">Focal Length (mm):</label>
+        <input type="number" id="focalLength" name="focalLength" value=350><br><br>
+        <button onclick="calculateCameraAltitude()">Calculate Rocket Altitude</button><br><br>
+        <p id="result_altitude"></p>
+      </td>
+    </tr>
+  </table>
+
+  My Recent Flights:</p>
+  <p>
+    <a href="https://www.rocketreviews.com/david-freys-flight-log.html">
+<img border="0" width="50" height="50"src="https://www.rocketreviews.com/rocketreviews-apple-touch-icon.png">
+</a></p>
+  </body>
+  <footer>
+  <ul>
+    <li><a href="file:///D:/Rockets/calculators/metric_calc.html">Metric Conversions</a></li>
+    <li><a href="file:///D:/Rockets/calculators/twr.html">Thrust/Weight Ratio</a></li>
+    <li><a href="file:///D:/Rockets/calculators/tubes.html">Body Tubes</a></li>
+    <li><a href="file:///D:/Rockets/calculators/stats.html">Stats</a></li>
+  </ul>
+</footer>
+</html>
+
+<script>
+  function convert() {
+    var mm = parseFloat(document.getElementById("mmInput").value);
+    var inch = mm / 25.4;
+    document.getElementById("inchResult").innerHTML = inch.toFixed(4);
+  }
+
+  function convert_in_mm() {
+    var inch = parseFloat(document.getElementById("inchInput").value);
+    var mm = inch * 25.4;
+    document.getElementById("mmResult").innerHTML = mm.toFixed(4);
+  }
+
+  function convert_m2f() {
+      var m = parseFloat(document.getElementById("mInput").value);
+      var ft = m * 3.28084;
+      document.getElementById("ftResult").innerHTML = ft.toFixed(2);
+  }
+
+  function convert_f2m() {
+      var ft = parseFloat(document.getElementById("ftInput").value);
+      var m = ft / 3.28084;
+      document.getElementById("mResult").innerHTML = m.toFixed(2);
+  }
+  
+  function convert_grams_to_oz() {
+    var g = parseFloat(document.getElementById("gInput").value);
+    var oz = g / 28.34952;
+    document.getElementById("ozResult").innerHTML = oz.toFixed(2);
+  }
+
+  function convert_oz_to_grams() {
+    var oz = parseFloat(document.getElementById("ozInput").value);
+    var gm = oz * 28.34952;
+    document.getElementById("gmResult").innerHTML = gm.toFixed(2);
+  }
+
+  function scaleObject() {
+    const length = document.getElementById("length").value;
+    const scalingPercentage = document.getElementById("scaling").value;
+    const scaledLength = length * (scalingPercentage / 100);
+    document.getElementById("result").innerHTML = "Scaled Length: " + scaledLength;
+  } 
+
+  function calculateScalingPercentage() {
+    const originalLength = document.getElementById("original-length").value;
+    const scaledLength = document.getElementById("scaled-length").value;
+    const scalingPercentage = ((scaledLength / originalLength) * 100) ;
+    document.getElementById("result_perc").innerHTML = "Scaling Percentage: " + scalingPercentage.toFixed(2) + "%";
+  }
+
+  function calculateCameraAltitude() {
+  const focalLengthMeters = document.getElementById("focalLength").value / 1000;
+  console.log("focalLength: "+ focalLengthMeters);
+  const apparentDistance  = document.getElementById("apparent_distance").value / 1000
+  console.log("apparentDistance: "+ apparentDistance);
+  const actualDistance    = document.getElementById("actual_distance").value
+  console.log("actualDistance: "+ actualDistance);
+  const fieldOfView       = document.getElementById("fov").value
+  console.log("fieldOfView: "+ fieldOfView);
+  const angleRadians      = fieldOfView * (Math.PI / 180);
+  console.log("AngleRadian: "+ angleRadians);
+  const altitude          = (apparentDistance / 2) * Math.tan(angleRadians);
+  console.log("altitude: "+ altitude);
+  const adjustedAltitude  = altitude * (actualDistance / apparentDistance);
+  console.log("adjustedAltitude: "+ adjustedAltitude);
+  document.getElementById("result_altitude").innerHTML = "Approx. Altitude: "+ adjustedAltitude.toFixed(2) +" meters";
+}
+</script>
+
+<!--
+F         = .35
+D_app     = .025
+D_act     = 620
+FOV       = 120
+angle_const = 0.017 (pi/180)
+
+FOV_rads  = 120 * angle_const
+FOV_rads  = 120 * 0.017 = 2.04
+alt = D_app/2 * tan(fov_rads)
+alt = (0.0125) * tan(1.02) = 0.0004
+adj_alt = alt * (D_act / D_app)
+adj_alt = 2.22 * (620 / .025)
+
+
+
+
+
+
+
+-->
