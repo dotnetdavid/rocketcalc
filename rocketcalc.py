@@ -1,6 +1,7 @@
 import streamlit as st
 
-st.title("Frogglicker Rocket Tools")
+
+st.title("Frogglicker's Rocket Tools")
 "These pages contains several simple, and commonly used tools for model rocketry"
 st.divider()
 
@@ -82,16 +83,24 @@ with tab1:
                 st.code(percent, language="python")
 with tab2:
     st.subheader("Thrust to Weight Calculator")
-    # measurement_system = st.radio("Select the unit type",
-    #                               ["Metric", "Imperial"], index="Metric",)
+    unit_type = st.radio(
+        "Select the unit type:",
+        ["Metric","Imperial"],
+        index=None)
 
-    genre = st.radio(
-        "Select the unit type",
-        ["Metric", "Imperial"],
-        index=None,
-    )
+    if unit_type == "Metric":
+        units={"force": "Newtons","mass": "Grams"}
+    elif unit_type == "Imperial":
+        units={"force": "lbF","mass": "ounces"}
 
-    st.write("You selected:", genre)
+    if unit_type is not None:
+        st.number_input(key="thrust", label=f"Enter _Thrust_ in {units.get('force')}:", step=0.1, min_value=0.0)
+        st.number_input (key="mass", label=f"Enter the _Mass_ in {units.get('mass')}:", step=0.01,min_value=0.0)
+
+
+
+
+
 
 with tab3:
     st.subheader("Tube Sizes")
